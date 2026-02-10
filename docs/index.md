@@ -2,9 +2,11 @@
 
 Made by Ramkrishna.
 
+![Arcane Builder](assets/banner-social.svg)
+
 Build Discord bots from JSON with a CLI-first workflow.
 
-![Arcane Builder](assets/banner-horizontal.svg)
+![Arcane Features](assets/features.svg)
 
 ## What Makes Arcane Different
 

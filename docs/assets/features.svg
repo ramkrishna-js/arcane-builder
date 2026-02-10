@@ -1,0 +1,32 @@
+<svg width="1600" height="430" viewBox="0 0 1600 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Arcane Builder Features</title>
+  <desc id="desc">Feature highlight banner for Arcane Builder</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="430" rx="24" fill="url(#bg)"/>
+  <g fill="#e2e8f0" font-family="Verdana, Geneva, sans-serif" font-size="40" font-weight="700">
+    <text x="90" y="140">JSON-First Commands</text>
+    <text x="90" y="240">Recursive File Loading</text>
+    <text x="90" y="340">Hot Reload + Validation</text>
+
+    <text x="860" y="140">Package-Based Extensibility</text>
+    <text x="860" y="240">CLI Scaffolding Workflow</text>
+    <text x="860" y="340">GitHub Pages Docs Ready</text>
+  </g>
+  <g stroke="url(#accent)" stroke-width="10" stroke-linecap="round">
+    <line x1="70" y1="165" x2="720" y2="165"/>
+    <line x1="70" y1="265" x2="720" y2="265"/>
+    <line x1="70" y1="365" x2="720" y2="365"/>
+    <line x1="840" y1="165" x2="1530" y2="165"/>
+    <line x1="840" y1="265" x2="1530" y2="265"/>
+    <line x1="840" y1="365" x2="1530" y2="365"/>
+  </g>
+</svg>
