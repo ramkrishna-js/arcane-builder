@@ -1,6 +1,6 @@
 # Configuration Guide
 
-`arcane.config.js` is the project root config contract.
+`arcane.config.js` is the root configuration contract for an Arcane project.
 
 ## Core Sections
 
@@ -11,15 +11,18 @@
 - `settings` for defaults, logging, feature flags
 - `owners` and `permissions`
 
-## Example
+## Production-minded Example
 
 ```javascript
 module.exports = {
   name: 'MyBot',
+  version: '1.0.0',
+  description: 'Arcane bot',
   bot: {
     token: process.env.DISCORD_TOKEN,
+    clientId: process.env.CLIENT_ID,
     prefix: '!',
-    intents: ['Guilds', 'GuildMessages', 'MessageContent']
+    intents: ['Guilds', 'GuildMessages', 'GuildMembers', 'MessageContent']
   },
   directories: {
     commands: './commands',
@@ -28,13 +31,37 @@ module.exports = {
     data: './data',
     assets: './assets',
     logs: './logs'
+  },
+  settings: {
+    logLevel: 'info',
+    commandDefaults: {
+      cooldown: 3,
+      ephemeral: false
+    }
   }
 };
 ```
 
-## Recommendations
+## Environment Strategy
 
-- Keep env-dependent values in `.env`.
-- Use explicit intent lists; do not over-request intents.
-- Keep directory overrides rare and consistent.
-- Re-run `arcane validate` after config changes.
+Use `.env` for all secrets and deployment-specific values:
+
+```dotenv
+DISCORD_TOKEN=
+CLIENT_ID=
+NODE_ENV=development
+```
+
+## Config Hygiene Rules
+
+- Keep directory paths explicit and stable.
+- Avoid over-requesting intents; only include what features require.
+- Keep default command behavior centralized in `settings.commandDefaults`.
+- Validate after every structural config change.
+
+## Validation Loop
+
+```bash
+arcane validate
+arcane validate --strict
+```

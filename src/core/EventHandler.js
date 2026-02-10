@@ -9,6 +9,7 @@ class EventHandler {
   }
 
   async loadEvents(dir) {
+    this.events.clear();
     const files = await this.scanner.scanDirectory(dir, ['.json']);
 
     for (const file of files) {

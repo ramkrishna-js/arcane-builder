@@ -20,12 +20,21 @@ Arcane commands are JSON files under `commands/` (nested folders supported).
   "package": null,
   "cooldown": 3,
   "response": {
-    "type": "embed",
-    "title": "Hello",
-    "description": "Hi {{user.mention}}"
+    "type": "message",
+    "content": "Hello from arcanebuilder"
   }
 }
 ```
+
+## Runtime Registration Behavior
+
+- `type: slash` or `type: both` -> registered as slash command
+- `type: text` or `type: both` -> handled for prefix text commands
+
+Registration scope:
+
+- If `settings.devGuild` exists -> guild command registration (fast)
+- If `settings.devGuild` is missing -> global registration (all guilds, slower propagation)
 
 ## Best Practices
 

@@ -1,12 +1,18 @@
 # Quickstart
 
-This quickstart takes a new bot from zero to running in under 5 minutes.
+This quickstart takes a new bot from zero to running quickly.
 
 ## 1. Create a Bot Project
 
 ```bash
 arcane init my-arcane-bot
 cd my-arcane-bot
+```
+
+You can run non-interactive if needed:
+
+```bash
+arcane init my-arcane-bot --yes
 ```
 
 ## 2. Configure Environment
@@ -26,7 +32,7 @@ NODE_ENV=development
 ## 3. Validate the Project
 
 ```bash
-arcane validate
+arcane validate --strict
 ```
 
 ## 4. Start Development Mode
@@ -45,6 +51,13 @@ Edit `commands/general/hello.json` to customize response.
 
 ## 6. Test in Discord
 
-- Invite the bot to your server
-- Trigger your command
-- Edit JSON files and watch changes hot-reload
+- Invite the bot with both scopes: `bot` and `applications.commands`
+- Trigger text command (for `type: both`): `!hello`
+- Trigger slash command: `/hello`
+- If global slash command is not visible instantly, wait for propagation
+
+## 7. Optional Deploy with PM2
+
+```bash
+arcane deploy --pm2 --name arcanebuilder
+```

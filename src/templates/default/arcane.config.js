@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'MyArcaneBot',
+  name: 'arcanebuilder',
   version: '1.0.0',
   description: 'A Discord bot built with Arcane',
   bot: {

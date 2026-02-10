@@ -1,46 +1,37 @@
-# Arcane Documentation
+# Arcane Documentation Overview
 
 Made by Ramkrishna.
 
-Arcane is a file-first Discord bot framework: define commands, events, and package config in JSON, then run with the Arcane CLI.
+Arcane Builder is a JSON-first Discord bot framework designed around file-based configuration and CLI workflows.
 
-## Start Here
+## What You Can Do Today
 
-- Getting Started: `docs/getting-started/installation.md`
-- Quickstart: `docs/getting-started/quickstart.md`
-- First Bot: `docs/getting-started/first-bot.md`
+- Scaffold bot projects with `arcane init`
+- Generate config files with `arcane create`
+- Validate command/event/package JSON with `arcane validate`
+- Run development mode with hot reload hooks using `arcane dev`
+- Manage package config files with `arcane package`
 
-## Guides
+## MVP Boundaries (Important)
 
-- Commands: `docs/guides/commands.md`
-- Events: `docs/guides/events.md`
-- Packages: `docs/guides/packages.md`
-- Configuration: `docs/guides/configuration.md`
-- Validation and Errors: `docs/guides/validation.md`
-- Hot Reload and Dev Flow: `docs/guides/hot-reload.md`
+Current scope is framework and tooling heavy:
 
-## Package Docs
+- Core loader/scanner/validator path is implemented
+- Full Discord runtime behavior is still evolving
+- Remote package registry fetch is currently stubbed
 
-- Music: `docs/packages/music.md`
-- Moderation: `docs/packages/moderation.md`
-- Leveling: `docs/packages/leveling.md`
+## Recommended Reading Order
 
-## API Reference
+1. `getting-started/quickstart.md`
+2. `guides/configuration.md`
+3. `guides/commands.md`
+4. `reference/architecture.md`
+5. `reference/local-testing.md`
 
-- CLI Reference: `docs/api/cli-reference.md`
-- Config Reference: `docs/api/config-reference.md`
-- Package API: `docs/api/package-api.md`
-- Template Variables: `docs/api/template-variables.md`
+## Documentation Sections
 
-## Examples
-
-- Music Bot: `docs/examples/music-bot.md`
-- Moderation Bot: `docs/examples/moderation-bot.md`
-- Multipurpose Bot: `docs/examples/multipurpose-bot.md`
-- Custom Package Workflow: `docs/examples/custom-package.md`
-
-## Extra References
-
-- Project Structure: `docs/reference/project-structure.md`
-- Troubleshooting: `docs/reference/troubleshooting.md`
-- Roadmap: `docs/reference/roadmap.md`
+- Getting Started: install and first project boot
+- Guides: command/event/package authoring workflows
+- API: CLI and config references
+- Examples: practical project templates
+- Reference: architecture, troubleshooting, deployment, roadmap

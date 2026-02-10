@@ -9,6 +9,7 @@ class CommandHandler {
   }
 
   async loadCommands(dir) {
+    this.commands.clear();
     const files = await this.scanner.scanDirectory(dir, ['.json']);
     const errors = [];
 

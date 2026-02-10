@@ -80,7 +80,10 @@ nav:
       - Multipurpose Bot: examples/multipurpose-bot.md
       - Custom Package: examples/custom-package.md
   - Reference:
+      - Architecture: reference/architecture.md
+      - Local Testing: reference/local-testing.md
       - Project Structure: reference/project-structure.md
       - Troubleshooting: reference/troubleshooting.md
+      - FAQ: reference/faq.md
       - GitHub Pages: reference/github-pages.md
       - Roadmap: reference/roadmap.md

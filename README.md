@@ -24,6 +24,14 @@ Arcane Builder is a JSON-first Discord bot framework and CLI focused on clean st
 
 **Docs Site:** https://ramkrishna-js.github.io/arcane-builder/
 
+Key pages:
+
+- Home: `docs/index.md`
+- Overview: `docs/overview.md`
+- Architecture: `docs/reference/architecture.md`
+- Local Testing: `docs/reference/local-testing.md`
+- GitHub Pages Deploy: `docs/reference/github-pages.md`
+
 ## 1. Quick Start
 
 ```bash
@@ -43,6 +51,7 @@ arcane init <name> [--template default]
 arcane create <command|event|package> <name>
 arcane dev
 arcane start
+arcane deploy [--pm2 --name arcanebuilder]
 arcane validate [--strict]
 arcane package <add|remove|list> [name]
 ```

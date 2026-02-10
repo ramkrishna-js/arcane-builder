@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs-extra');
 
 const defaults = {
-  name: 'ArcaneBot',
+  name: 'arcanebuilder',
   version: '1.0.0',
   bot: {
     token: process.env.DISCORD_TOKEN,

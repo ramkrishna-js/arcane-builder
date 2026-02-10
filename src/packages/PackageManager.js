@@ -9,6 +9,7 @@ class PackageManager {
   }
 
   async loadConfiguredPackages(packagesDir) {
+    this.packages.clear();
     if (!(await fs.pathExists(packagesDir))) {
       return;
     }
