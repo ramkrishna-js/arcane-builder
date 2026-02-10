@@ -1,0 +1,39 @@
+:root {
+  --arcane-cyan: #22d3ee;
+  --arcane-amber: #f59e0b;
+  --arcane-slate: #0f172a;
+}
+
+.md-header {
+  background: linear-gradient(90deg, var(--arcane-slate), #1f2937);
+}
+
+.md-tabs {
+  background: linear-gradient(90deg, #111827, #0b1020);
+}
+
+.md-typeset h1 {
+  color: #0f172a;
+  letter-spacing: 0.01em;
+}
+
+.md-typeset h2 {
+  border-left: 4px solid var(--arcane-cyan);
+  padding-left: 0.55rem;
+}
+
+.md-typeset table th {
+  background: #f1f5f9;
+}
+
+.md-typeset code {
+  border-radius: 6px;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1 {
+  color: #e2e8f0;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h2 {
+  border-left-color: var(--arcane-amber);
+}

@@ -1,0 +1,12 @@
+{
+  "name": "ping",
+  "description": "Check if the bot is alive",
+  "category": "general",
+  "type": "both",
+  "package": null,
+  "cooldown": 3,
+  "response": {
+    "type": "message",
+    "content": "Pong!"
+  }
+}

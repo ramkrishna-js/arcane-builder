@@ -1,0 +1,6 @@
+{
+  "package": "@arcane/example",
+  "version": "latest",
+  "enabled": false,
+  "config": {}
+}

@@ -1,0 +1,11 @@
+{
+  "event": "ready",
+  "enabled": true,
+  "package": null,
+  "once": true,
+  "config": {
+    "console": {
+      "message": "{{bot.tag}} is online"
+    }
+  }
+}

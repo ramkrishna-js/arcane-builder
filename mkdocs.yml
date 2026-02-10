@@ -1,0 +1,86 @@
+site_name: Arcane Builder
+site_description: File-first Discord bot framework
+site_author: Ramkrishna
+site_url: https://ramkrishna-js.github.io/arcane-builder/
+repo_name: ramkrishna-js/arcane-builder
+repo_url: https://github.com/ramkrishna-js/arcane-builder
+copyright: Made by Ramkrishna
+
+docs_dir: docs
+
+theme:
+  name: material
+  language: en
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: amber
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: amber
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home: index.md
+  - Overview: README.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quickstart: getting-started/quickstart.md
+      - First Bot: getting-started/first-bot.md
+  - Guides:
+      - Commands: guides/commands.md
+      - Events: guides/events.md
+      - Packages: guides/packages.md
+      - Configuration: guides/configuration.md
+      - Validation: guides/validation.md
+      - Hot Reload: guides/hot-reload.md
+  - Packages:
+      - Music: packages/music.md
+      - Moderation: packages/moderation.md
+      - Leveling: packages/leveling.md
+  - API:
+      - CLI Reference: api/cli-reference.md
+      - Config Reference: api/config-reference.md
+      - Package API: api/package-api.md
+      - Template Variables: api/template-variables.md
+  - Examples:
+      - Music Bot: examples/music-bot.md
+      - Moderation Bot: examples/moderation-bot.md
+      - Multipurpose Bot: examples/multipurpose-bot.md
+      - Custom Package: examples/custom-package.md
+  - Reference:
+      - Project Structure: reference/project-structure.md
+      - Troubleshooting: reference/troubleshooting.md
+      - GitHub Pages: reference/github-pages.md
+      - Roadmap: reference/roadmap.md
