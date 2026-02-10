@@ -1,29 +1,27 @@
 # Roadmap
 
-## Current (Implemented)
+## Current
 
-- CLI scaffolding and generation commands
-- Recursive file scanning and JSON loading
-- Schema validation with AJV
-- Runtime state loading for commands/events/packages
-- Hot reload watcher hooks
-- GitHub Pages docs deployment pipeline
+- Guide-style documentation architecture
+- Interactive project initialization
+- Slash + text command handling
+- Buttons and dropdown/select interactions
+- Deploy command with PM2 support
 
-## Next (In Progress)
+## Near-Term
 
-- Discord.js runtime execution integration
-- Real remote package loading (registry/CDN)
-- Lock file lifecycle improvements
-- Better diagnostics and actionable error formatting
-- Expanded project templates (`music-bot`, `moderation-bot`, `multipurpose`)
+- richer event execution features
+- stronger package runtime contracts
+- improved diagnostics for config and runtime errors
+- additional production templates
 
-## Later (Planned)
+## Mid-Term
 
-- Dashboard and telemetry features
-- Official package registry expansion
-- CI recipes for production deployments
-- Monorepo split into dedicated package boundaries
+- full remote package loading pipeline
+- lockfile upgrade workflows
+- observability and runtime health tooling
 
-## Release Direction
+## Long-Term
 
-Near-term releases should prioritize runtime completeness and package ecosystem quality over new surface-area features.
+- monorepo extraction (`arcane-core`, `arcane-cli`, package ecosystem)
+- broader official package suite

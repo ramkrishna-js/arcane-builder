@@ -1,5 +1,6 @@
 site_name: Arcane Builder
-site_description: File-first Discord bot framework
+site_description: Production-grade JSON-first Discord bot framework
+author: Ramkrishna
 site_author: Ramkrishna
 site_url: https://ramkrishna-js.github.io/arcane-builder/
 repo_name: ramkrishna-js/arcane-builder
@@ -26,7 +27,9 @@ theme:
     - navigation.tabs
     - navigation.sections
     - navigation.top
+    - navigation.instant
     - content.code.copy
+    - content.action.edit
     - search.suggest
     - search.highlight
 
@@ -53,34 +56,33 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Overview: overview.md
-  - Getting Started:
+  - Start Here:
+      - Overview: overview.md
       - Installation: getting-started/installation.md
       - Quickstart: getting-started/quickstart.md
       - First Bot: getting-started/first-bot.md
-  - Guides:
-      - Commands: guides/commands.md
-      - Events: guides/events.md
-      - Packages: guides/packages.md
-      - Configuration: guides/configuration.md
-      - Validation: guides/validation.md
-      - Hot Reload: guides/hot-reload.md
-  - Packages:
-      - Music: packages/music.md
-      - Moderation: packages/moderation.md
-      - Leveling: packages/leveling.md
+  - Concepts:
+      - Architecture: concepts/architecture.md
+      - Config Model: concepts/config-model.md
+      - Runtime Lifecycle: concepts/runtime-lifecycle.md
+      - Command Lifecycle: concepts/command-lifecycle.md
+  - Guide:
+      - Project Setup: guide/project-setup.md
+      - Command Workflow: guide/command-workflow.md
+      - Interactions and Components: guide/interactions-components.md
+      - Package Workflow: guide/package-workflow.md
+      - Deployment: guide/deployment.md
+      - Testing and Quality: guide/testing-quality.md
+  - Recipes:
+      - Welcome Flow: recipes/welcome-flow.md
+      - Support Panel: recipes/support-panel.md
+      - Moderation Starter: recipes/moderation-starter.md
   - API:
       - CLI Reference: api/cli-reference.md
       - Config Reference: api/config-reference.md
       - Package API: api/package-api.md
       - Template Variables: api/template-variables.md
-  - Examples:
-      - Music Bot: examples/music-bot.md
-      - Moderation Bot: examples/moderation-bot.md
-      - Multipurpose Bot: examples/multipurpose-bot.md
-      - Custom Package: examples/custom-package.md
   - Reference:
-      - Architecture: reference/architecture.md
       - Local Testing: reference/local-testing.md
       - Project Structure: reference/project-structure.md
       - Troubleshooting: reference/troubleshooting.md

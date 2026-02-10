@@ -1,28 +1,19 @@
 # Configuration Guide
 
-`arcane.config.js` is the root configuration contract for an Arcane project.
+`arcane.config.js` controls runtime identity, command registration scope, and project directory mapping.
 
-## Core Sections
+## Practical Defaults
 
-- `name`, `version`, `description`
-- `bot` token/client/prefix/intents/presence
-- `directories` for commands/events/packages/data/assets/logs
-- `registry` for package registry/CDN options
-- `settings` for defaults, logging, feature flags
-- `owners` and `permissions`
-
-## Production-minded Example
-
-```javascript
+```js
 module.exports = {
-  name: 'MyBot',
+  name: 'arcanebuilder',
   version: '1.0.0',
-  description: 'Arcane bot',
+  description: 'A Discord bot built with Arcane Builder',
   bot: {
     token: process.env.DISCORD_TOKEN,
     clientId: process.env.CLIENT_ID,
     prefix: '!',
-    intents: ['Guilds', 'GuildMessages', 'GuildMembers', 'MessageContent']
+    intents: ['Guilds', 'GuildMessages', 'MessageContent']
   },
   directories: {
     commands: './commands',
@@ -33,35 +24,30 @@ module.exports = {
     logs: './logs'
   },
   settings: {
-    logLevel: 'info',
-    commandDefaults: {
-      cooldown: 3,
-      ephemeral: false
-    }
+    logLevel: 'info'
   }
 };
 ```
 
-## Environment Strategy
+## High-Impact Settings
 
-Use `.env` for all secrets and deployment-specific values:
+- `bot.intents`: controls event visibility
+- `bot.prefix`: text command prefix
+- `settings.devGuild`: slash command registration scope for fast iteration
+- `directories.*`: where Arcane loads resources
 
-```dotenv
-DISCORD_TOKEN=
-CLIENT_ID=
-NODE_ENV=development
-```
+## Registration Strategy
 
-## Config Hygiene Rules
+Development:
 
-- Keep directory paths explicit and stable.
-- Avoid over-requesting intents; only include what features require.
-- Keep default command behavior centralized in `settings.commandDefaults`.
-- Validate after every structural config change.
+- set `settings.devGuild` for near-instant slash updates
 
-## Validation Loop
+Production:
+
+- remove `settings.devGuild` for global registration
+
+## Validation Flow
 
 ```bash
-arcane validate
 arcane validate --strict
 ```

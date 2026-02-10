@@ -4,41 +4,39 @@ Made by Ramkrishna.
 
 ![Arcane Builder](assets/banner-social.svg)
 
-Build Discord bots from JSON with a CLI-first workflow.
+Arcane Builder is a production-oriented, JSON-first Discord bot framework. It gives teams a clean file architecture, a CLI workflow, runtime validation, and fast iteration loops.
 
-![Arcane Features](assets/features.svg)
+## Why This Exists
 
-## What Makes Arcane Different
+Most Discord bot projects start clean and become hard to reason about at scale. Arcane enforces a structure where commands, events, and package settings remain explicit and reviewable.
 
-- JSON-first command, event, and package system
-- Recursive config loading for large bots
-- Hot reload for fast development cycles
-- Validation before runtime failure
-- Monorepo-ready architecture direction
+## Start Here
 
-## Quick Start
+1. `getting-started/installation.md`
+2. `getting-started/quickstart.md`
+3. `guide/command-workflow.md`
+4. `guide/interactions-components.md`
+5. `guide/deployment.md`
 
-```bash
-arcane init my-bot
-cd my-bot
-cp .env.example .env
-arcane validate
-arcane dev
-```
+## Core Capabilities
 
-## Core Commands
+- File-first command and event definitions
+- Runtime schema validation before failure cascades
+- Slash + text command support
+- Buttons and dropdown/select interactions
+- Hot reload during development
+- PM2 deployment path for long-running bots
 
-| Command | Purpose |
-|---|---|
-| `arcane init` | Create a new Arcane project |
-| `arcane create` | Generate command/event/package config |
-| `arcane dev` | Development mode with hot reload |
-| `arcane validate` | Validate all project config |
-| `arcane package` | Manage package config files |
+## Production Notes
 
-## Read Next
+- Use `settings.devGuild` while developing slash commands for instant updates.
+- Remove `settings.devGuild` for global command registration.
+- Always run `arcane validate --strict` before deployment.
 
-- `getting-started/quickstart.md`
-- `guides/configuration.md`
-- `api/cli-reference.md`
-- `reference/troubleshooting.md`
+## Documentation Tracks
+
+- Concepts: architecture and lifecycle model
+- Guide: step-by-step implementation patterns
+- Recipes: copyable patterns for common bot features
+- API: exact command/config reference
+- Reference: troubleshooting, local testing, roadmap

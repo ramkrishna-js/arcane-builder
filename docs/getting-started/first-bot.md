@@ -1,67 +1,44 @@
-# First Bot Walkthrough
+# First Bot
 
-This guide builds a basic multipurpose bot with command, event, and package config.
+This walkthrough creates a structured bot with slash + text command support.
 
-## Step 1: Initialize
+## 1. Initialize
 
 ```bash
 arcane init first-bot
 cd first-bot
 ```
 
-## Step 2: Core Config
-
-Edit `arcane.config.js` and confirm:
-
-- `bot.token` uses `process.env.DISCORD_TOKEN`
-- `bot.intents` includes the events you need
-- `directories` point to your folder layout
-
-## Step 3: Command
-
-Create and edit:
+## 2. Environment
 
 ```bash
-arcane create command general/ping
+cp .env.example .env
 ```
 
-Example payload:
+Set token and client ID in `.env`.
 
-```json
-{
-  "name": "ping",
-  "description": "Latency check",
-  "type": "both",
-  "package": null,
-  "cooldown": 2,
-  "response": {
-    "type": "message",
-    "content": "Pong from Arcane"
-  }
-}
-```
-
-## Step 4: Event
+## 3. Create Command and Event
 
 ```bash
+arcane create command general/hello
 arcane create event ready
 ```
 
-Set `event` to `ready` and add startup console messaging.
-
-## Step 5: Optional Package
-
-```bash
-arcane package add @arcane/music
-```
-
-Then tune `packages/` JSON config.
-
-## Step 6: Run
+## 4. Validate
 
 ```bash
 arcane validate --strict
+```
+
+## 5. Run
+
+```bash
 arcane dev
 ```
 
-You now have a clean, file-first bot workflow.
+## 6. Test
+
+- Slash: `/hello`
+- Text: `!hello`
+
+If slash commands delay, set `settings.devGuild` temporarily.

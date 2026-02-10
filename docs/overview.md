@@ -1,37 +1,35 @@
-# Arcane Documentation Overview
+# Documentation Overview
 
-Made by Ramkrishna.
+This documentation is organized for teams shipping real bots, not just demos.
 
-Arcane Builder is a JSON-first Discord bot framework designed around file-based configuration and CLI workflows.
+## Learning Path
 
-## What You Can Do Today
+1. Getting Started
+2. Core Concepts
+3. Implementation Guides
+4. Deployment + Operations
+5. API + Reference
 
-- Scaffold bot projects with `arcane init`
-- Generate config files with `arcane create`
-- Validate command/event/package JSON with `arcane validate`
-- Run development mode with hot reload hooks using `arcane dev`
-- Manage package config files with `arcane package`
+## Audience
 
-## MVP Boundaries (Important)
+- Bot developers building structured Discord bots
+- Package authors extending Arcane behavior
+- Maintainers who need reliable deploy and test workflows
 
-Current scope is framework and tooling heavy:
+## Current Runtime Scope
 
-- Core loader/scanner/validator path is implemented
-- Full Discord runtime behavior is still evolving
-- Remote package registry fetch is currently stubbed
+Arcane currently includes:
 
-## Recommended Reading Order
+- CLI scaffolding and generation
+- Runtime loading and validation
+- Command registration and interaction handling
+- Component interactions (buttons/select menus)
+- Development watch mode and reload hooks
 
-1. `getting-started/quickstart.md`
-2. `guides/configuration.md`
-3. `guides/commands.md`
-4. `reference/architecture.md`
-5. `reference/local-testing.md`
+## Recommended Team Workflow
 
-## Documentation Sections
-
-- Getting Started: install and first project boot
-- Guides: command/event/package authoring workflows
-- API: CLI and config references
-- Examples: practical project templates
-- Reference: architecture, troubleshooting, deployment, roadmap
+1. Define command/event contracts in JSON.
+2. Validate with `arcane validate --strict`.
+3. Run `arcane dev` in a test guild.
+4. Move to global registration when stable.
+5. Deploy via `arcane deploy --pm2 --name arcanebuilder`.

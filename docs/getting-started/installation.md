@@ -4,38 +4,30 @@
 
 - Node.js 18+
 - npm 9+
-- A Discord application and bot token
+- Discord bot token and application ID
 
-## Global Install
+## Install CLI
 
 ```bash
 npm install -g arcane-builder
 ```
 
-## Local Development (Framework Contributors)
+## Contributor Setup
 
 ```bash
-git clone <your-fork-or-repo>
+git clone https://github.com/ramkrishna-js/arcane-builder.git
 cd arcane-builder
 npm install
 npm link
 ```
 
-Now `arcane` is available globally from your local checkout.
-
-## Verify Install
+## Verify
 
 ```bash
 arcane --version
 arcane --help
 ```
 
-## Create Your First Project
+## Next Step
 
-```bash
-arcane init my-bot
-cd my-bot
-cp .env.example .env
-# set DISCORD_TOKEN in .env
-arcane dev
-```
+Continue with `getting-started/quickstart.md`.
