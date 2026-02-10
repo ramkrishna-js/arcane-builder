@@ -5,7 +5,12 @@ const {
   GatewayIntentBits,
   Partials,
   ApplicationCommandOptionType,
-  EmbedBuilder
+  ActionRowBuilder,
+  ApplicationCommandType,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
+  StringSelectMenuBuilder
 } = require('discord.js');
 const ConfigLoader = require('./ConfigLoader');
 const CommandHandler = require('./CommandHandler');
@@ -14,6 +19,7 @@ const HotReload = require('./HotReload');
 const PackageManager = require('../packages/PackageManager');
 const Validator = require('../utils/validator').Validator;
 const { createLogger } = require('../utils/logger');
+const { renderTemplate } = require('../utils/templater');
 
 class ArcaneBot {
   constructor({ mode = 'start' } = {}) {
@@ -29,6 +35,7 @@ class ArcaneBot {
     this.client = null;
     this.loggedIn = false;
     this.handlersBound = false;
+    this.componentRegistry = new Map();
   }
 
   resolveIntents(intentNames = []) {
@@ -56,6 +63,7 @@ class ArcaneBot {
   }
 
   async loadProjectState() {
+    this.componentRegistry.clear();
     this.config = await this.configLoader.load('arcane.config.js');
 
     const commandsPath = path.resolve(process.cwd(), this.config.directories.commands);
@@ -166,17 +174,176 @@ class ArcaneBot {
     this.logger.info(`Registered ${slashCommands.length} global slash commands`);
   }
 
-  createResponsePayload(commandConfig) {
-    const response = commandConfig.response || commandConfig.responses?.success;
+  getTemplateContext(source, extras = {}) {
+    const user = source?.user || source?.author;
+    const member = source?.member;
+    const guild = source?.guild;
+    const channel = source?.channel;
+    const botUser = this.client?.user;
+
+    return {
+      user: user ? {
+        id: user.id,
+        tag: user.tag,
+        username: user.username,
+        mention: `<@${user.id}>`,
+        avatar: user.displayAvatarURL ? user.displayAvatarURL() : undefined
+      } : {},
+      member: member ? {
+        id: member.id,
+        nickname: member.nickname,
+        mention: `<@${member.id}>`
+      } : {},
+      guild: guild ? {
+        id: guild.id,
+        name: guild.name,
+        memberCount: guild.memberCount
+      } : {},
+      channel: channel ? {
+        id: channel.id,
+        name: channel.name,
+        mention: `<#${channel.id}>`
+      } : {},
+      bot: botUser ? {
+        id: botUser.id,
+        tag: botUser.tag,
+        avatar: botUser.displayAvatarURL ? botUser.displayAvatarURL() : undefined
+      } : {},
+      ...extras
+    };
+  }
+
+  templateValue(value, context) {
+    if (typeof value === 'string') {
+      return renderTemplate(value, context);
+    }
+    if (Array.isArray(value)) {
+      return value.map((v) => this.templateValue(v, context));
+    }
+    if (value && typeof value === 'object') {
+      const out = {};
+      for (const [key, child] of Object.entries(value)) {
+        out[key] = this.templateValue(child, context);
+      }
+      return out;
+    }
+    return value;
+  }
+
+  resolveButtonStyle(style) {
+    const value = String(style || 'secondary').toLowerCase();
+    switch (value) {
+      case 'primary':
+        return ButtonStyle.Primary;
+      case 'secondary':
+        return ButtonStyle.Secondary;
+      case 'success':
+        return ButtonStyle.Success;
+      case 'danger':
+        return ButtonStyle.Danger;
+      case 'link':
+        return ButtonStyle.Link;
+      default:
+        return ButtonStyle.Secondary;
+    }
+  }
+
+  registerComponentAction(commandName, id, action, interactionScope = null) {
+    this.componentRegistry.set(id, {
+      commandName,
+      action,
+      interactionScope
+    });
+  }
+
+  buildComponentRows(commandConfig, context, interactionScope = null) {
+    const rows = [];
+    const buttons = commandConfig.buttons || [];
+    const selectMenus = commandConfig.selectMenus || commandConfig.dropdowns || [];
+
+    if (buttons.length) {
+      let row = new ActionRowBuilder();
+      let countInRow = 0;
+      buttons.forEach((btn, index) => {
+        const templated = this.templateValue(btn, context);
+        const style = this.resolveButtonStyle(templated.style);
+        const component = new ButtonBuilder()
+          .setLabel(templated.label || `Button ${index + 1}`)
+          .setStyle(style)
+          .setDisabled(Boolean(templated.disabled));
+
+        if (templated.emoji) {
+          component.setEmoji(templated.emoji);
+        }
+
+        if (style === ButtonStyle.Link) {
+          if (!templated.url) return;
+          component.setURL(templated.url);
+        } else {
+          const customId = templated.customId || `arcane:${commandConfig.name}:btn:${index}`;
+          component.setCustomId(customId);
+          this.registerComponentAction(commandConfig.name, customId, templated, interactionScope);
+        }
+
+        row.addComponents(component);
+        countInRow += 1;
+
+        if (countInRow >= 5) {
+          rows.push(row);
+          row = new ActionRowBuilder();
+          countInRow = 0;
+        }
+      });
+      if (countInRow > 0) rows.push(row);
+    }
+
+    for (let i = 0; i < selectMenus.length; i += 1) {
+      const menu = this.templateValue(selectMenus[i], context);
+      const customId = menu.customId || `arcane:${commandConfig.name}:select:${i}`;
+      const select = new StringSelectMenuBuilder()
+        .setCustomId(customId)
+        .setPlaceholder(menu.placeholder || 'Select an option')
+        .setMinValues(menu.minValues ?? 1)
+        .setMaxValues(menu.maxValues ?? 1)
+        .setDisabled(Boolean(menu.disabled))
+        .addOptions((menu.options || []).map((opt, optionIndex) => ({
+          label: opt.label || `Option ${optionIndex + 1}`,
+          value: String(opt.value ?? `option_${optionIndex + 1}`),
+          description: opt.description,
+          emoji: opt.emoji,
+          default: Boolean(opt.default)
+        })));
+
+      this.registerComponentAction(commandConfig.name, customId, menu, interactionScope);
+      rows.push(new ActionRowBuilder().addComponents(select));
+    }
+
+    return rows;
+  }
+
+  createResponsePayload(commandConfig, source = null, extras = {}) {
+    const context = this.getTemplateContext(source, extras);
+    const response = this.templateValue(commandConfig.response || commandConfig.responses?.success, context);
     if (!response) {
       return { content: `Executed: ${commandConfig.name}` };
     }
+
+    const interactionScope = source?.user?.id || source?.author?.id || null;
+    const components = this.buildComponentRows(commandConfig, context, interactionScope);
 
     if (response.type === 'embed') {
       const embed = new EmbedBuilder();
       if (response.title) embed.setTitle(response.title);
       if (response.description) embed.setDescription(response.description);
       if (response.color) embed.setColor(response.color);
+      if (response.thumbnail) {
+        const thumbUrl = typeof response.thumbnail === 'string' ? response.thumbnail : response.thumbnail.url;
+        if (thumbUrl) embed.setThumbnail(thumbUrl);
+      }
+      if (response.image) {
+        const imageUrl = typeof response.image === 'string' ? response.image : response.image.url;
+        if (imageUrl) embed.setImage(imageUrl);
+      }
       if (response.fields && Array.isArray(response.fields)) {
         embed.setFields(
           response.fields.map((f) => ({
@@ -186,10 +353,46 @@ class ArcaneBot {
           }))
         );
       }
-      return { embeds: [embed] };
+      if (response.footer?.text) {
+        embed.setFooter({
+          text: response.footer.text,
+          iconURL: response.footer.iconUrl || response.footer.iconURL
+        });
+      }
+      if (response.timestamp) {
+        embed.setTimestamp(new Date());
+      }
+      const payload = { embeds: [embed] };
+      if (components.length) payload.components = components;
+      if (commandConfig.ephemeral !== undefined) payload.ephemeral = Boolean(commandConfig.ephemeral);
+      return payload;
     }
 
-    return { content: response.content || `Executed: ${commandConfig.name}` };
+    const payload = { content: response.content || `Executed: ${commandConfig.name}` };
+    if (components.length) payload.components = components;
+    if (commandConfig.ephemeral !== undefined) payload.ephemeral = Boolean(commandConfig.ephemeral);
+    return payload;
+  }
+
+  getComponentReplyFromAction(actionRecord, interaction) {
+    const action = actionRecord?.action || {};
+    const commandName = actionRecord?.commandName;
+    const commandConfig = this.commandHandler.commands.get(commandName)?.config;
+    const value = interaction.isStringSelectMenu() ? interaction.values?.[0] : undefined;
+
+    if (action.responses && value && action.responses[value]) {
+      return { content: action.responses[value], ephemeral: true };
+    }
+    if (action.response) {
+      return { content: action.response, ephemeral: true };
+    }
+    if (commandConfig?.componentResponses?.[interaction.customId]) {
+      return { content: commandConfig.componentResponses[interaction.customId], ephemeral: true };
+    }
+    if (interaction.isStringSelectMenu() && value) {
+      return { content: `You selected: ${value}`, ephemeral: true };
+    }
+    return { content: 'Button clicked.', ephemeral: true };
   }
 
   bindRuntimeHandlers() {
@@ -198,13 +401,29 @@ class ArcaneBot {
     }
 
     this.client.on('interactionCreate', async (interaction) => {
+      if (interaction.isButton() || interaction.isStringSelectMenu()) {
+        const actionRecord = this.componentRegistry.get(interaction.customId);
+        if (!actionRecord) return;
+        if (actionRecord.interactionScope && actionRecord.interactionScope !== interaction.user?.id) {
+          await interaction.reply({ content: 'This control is no longer active.', ephemeral: true });
+          return;
+        }
+        const payload = this.getComponentReplyFromAction(actionRecord, interaction);
+        if (interaction.deferred || interaction.replied) {
+          await interaction.editReply(payload);
+        } else {
+          await interaction.reply(payload);
+        }
+        return;
+      }
+
       if (!interaction.isChatInputCommand()) return;
       try {
         const registered = this.commandHandler.commands.get(interaction.commandName);
         if (!registered) return;
         const commandConfig = registered.config;
         const result = await this.commandHandler.handleCommand(interaction, this.packageManager);
-        const payload = result?.response || this.createResponsePayload(commandConfig);
+        const payload = result?.response || this.createResponsePayload(commandConfig, interaction);
         if (interaction.deferred || interaction.replied) {
           await interaction.editReply(payload);
         } else {
@@ -231,11 +450,11 @@ class ArcaneBot {
       if (!(cfg.type === 'text' || cfg.type === 'both')) return;
       if (cfg.package) return;
 
-      const payload = this.createResponsePayload(cfg);
+      const payload = this.createResponsePayload(cfg, message);
       if (payload.embeds) {
-        await message.reply({ embeds: payload.embeds });
+        await message.reply(payload);
       } else {
-        await message.reply(payload.content || 'Done.');
+        await message.reply(payload);
       }
     });
 

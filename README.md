@@ -81,3 +81,8 @@ arcane package <add|remove|list> [name]
 ## 6. Made By
 
 Made by Ramkrishna.
+
+## 7. Open Source
+
+- Contributing guide: `CONTRIBUTING.md`
+- Code of Conduct: `CODE_OF_CONDUCT.md`
