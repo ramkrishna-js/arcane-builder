@@ -24,6 +24,7 @@ theme:
       primary: blue grey
       accent: blue
   features:
+    - navigation.tabs
     - navigation.sections
     - navigation.expand
     - navigation.top
@@ -77,6 +78,11 @@ nav:
       - Testing and Quality: guide/testing-quality.md
       - Validation: guides/validation.md
       - Hot Reload: guides/hot-reload.md
+  - Packages:
+      - Overview: packages/index.md
+      - Moderation: packages/moderation.md
+      - Music: packages/music.md
+      - Leveling: packages/leveling.md
   - Recipes:
       - Welcome Flow: recipes/welcome-flow.md
       - Support Panel: recipes/support-panel.md

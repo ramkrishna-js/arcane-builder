@@ -32,5 +32,15 @@ Arcane Builder is a JSON-first framework and CLI for shipping Discord bots with 
 - Getting Started: install, bootstrap, first run
 - Concepts: architecture, config model, lifecycle
 - Guide: implementation workflows
+- Packages: official package references
 - API: command/config/package references
 - Reference: troubleshooting, FAQ, roadmap
+
+<details>
+  <summary><strong>Packages Dropdown</strong></summary>
+
+  - [Packages Overview](packages/index.md)
+  - [@arcane/moderation](packages/moderation.md)
+  - [@arcane/music](packages/music.md)
+  - [@arcane/leveling](packages/leveling.md)
+</details>
