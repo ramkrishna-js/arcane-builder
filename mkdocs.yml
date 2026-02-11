@@ -13,22 +13,24 @@ theme:
   language: en
   logo: assets/logo.svg
   favicon: assets/logo.svg
+  font:
+    text: Plus Jakarta Sans
+    code: JetBrains Mono
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: teal
-      accent: amber
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: teal
-      accent: amber
+    - scheme: default
+      primary: blue grey
+      accent: blue
+    - scheme: slate
+      primary: blue grey
+      accent: blue
   features:
-    - navigation.tabs
     - navigation.sections
+    - navigation.expand
     - navigation.top
     - navigation.instant
     - content.code.copy
     - content.action.edit
+    - toc.follow
     - search.suggest
     - search.highlight
 
@@ -55,7 +57,7 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Start Here:
+  - Getting Started:
       - Overview: overview.md
       - Installation: getting-started/installation.md
       - Quickstart: getting-started/quickstart.md
@@ -68,10 +70,13 @@ nav:
   - Guide:
       - Project Setup: guide/project-setup.md
       - Command Workflow: guide/command-workflow.md
+      - Events: guides/events.md
       - Interactions and Components: guide/interactions-components.md
       - Package Workflow: guide/package-workflow.md
       - Deployment: guide/deployment.md
       - Testing and Quality: guide/testing-quality.md
+      - Validation: guides/validation.md
+      - Hot Reload: guides/hot-reload.md
   - Recipes:
       - Welcome Flow: recipes/welcome-flow.md
       - Support Panel: recipes/support-panel.md

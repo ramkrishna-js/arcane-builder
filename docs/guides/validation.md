@@ -19,7 +19,7 @@ arcane validate --strict
 ## Common Failures
 
 - Invalid command name pattern (must be lowercase slug)
-- Missing required fields (`name`, `description`, `event`, `package`)
+- Missing required fields (`name`, `description`, `event`)
 - Type mismatch (string vs number/boolean)
 
 ## Debug Workflow

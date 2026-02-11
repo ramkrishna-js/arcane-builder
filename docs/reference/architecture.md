@@ -1,6 +1,6 @@
 # Architecture
 
-Arcane Builder currently ships as an MVP runtime and CLI scaffold.
+Arcane Builder ships as a runtime + CLI framework centered on JSON-defined behavior.
 
 ## High-Level Flow
 
@@ -10,7 +10,8 @@ Arcane Builder currently ships as an MVP runtime and CLI scaffold.
 4. JSON files are recursively scanned and validated.
 5. Command/Event maps are loaded into memory.
 6. Package configs are loaded through `PackageManager`.
-7. In dev mode, `HotReload` watches configured directories.
+7. Runtime handlers are bound for commands, interactions, and configured events.
+8. In dev mode, `HotReload` watches configured directories and rebonds runtime state.
 
 ## Core Modules
 
@@ -26,21 +27,29 @@ Arcane Builder currently ships as an MVP runtime and CLI scaffold.
 
 ## Runtime Status
 
-Current implementation is intentionally lightweight:
+Current implementation:
 
 - CLI scaffolding: implemented
 - JSON schema validation: implemented
 - Directory scanning: implemented
 - Hot reload hooks: implemented
-- Full Discord.js execution loop: planned
+- Discord command + interaction execution loop: implemented
+- Configured event execution (`on`/`once`): implemented
 - Real remote package registry fetch: planned
 
-## Request Lifecycle (Current MVP)
+## Command Lifecycle
 
 1. Load config and validate static JSON.
-2. Build in-memory command/event registries.
+2. Build in-memory command registry.
 3. Resolve package-backed command to package handler if available.
 4. Return structured result or throw actionable error.
+
+## Event Lifecycle
+
+1. Load and validate `events/**/*.json`.
+2. Bind listeners to Discord client (`once` or persistent listener).
+3. Execute package-backed event if `package` is configured.
+4. Otherwise run core event behavior (`config.console.message` and optional event response dispatch).
 
 ## Design Principles
 

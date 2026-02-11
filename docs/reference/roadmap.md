@@ -10,7 +10,6 @@
 
 ## Near-Term
 
-- richer event execution features
 - stronger package runtime contracts
 - improved diagnostics for config and runtime errors
 - additional production templates

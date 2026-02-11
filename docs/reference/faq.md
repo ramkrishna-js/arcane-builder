@@ -2,7 +2,7 @@
 
 ## Is Arcane production-ready?
 
-Arcane currently provides a functional CLI/config workflow and validation runtime. Full Discord.js event/interaction execution is still being expanded.
+Arcane is production-oriented for structured command/event bots. Core command execution, interaction handling, and JSON-configured event execution are implemented. The remote package registry pipeline is still MVP/stubbed.
 
 ## Do I need to write JavaScript for commands?
 

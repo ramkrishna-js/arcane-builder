@@ -6,7 +6,6 @@ const {
   Partials,
   ApplicationCommandOptionType,
   ActionRowBuilder,
-  ApplicationCommandType,
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
@@ -36,6 +35,7 @@ class ArcaneBot {
     this.loggedIn = false;
     this.handlersBound = false;
     this.componentRegistry = new Map();
+    this.boundEventListeners = [];
   }
 
   resolveIntents(intentNames = []) {
@@ -104,6 +104,7 @@ class ArcaneBot {
       await this.waitForReady();
       await this.registerCommands();
       this.bindRuntimeHandlers();
+      this.bindConfiguredEvents();
     }
   }
 
@@ -395,6 +396,126 @@ class ArcaneBot {
     return { content: 'Button clicked.', ephemeral: true };
   }
 
+  inferEventSource(args = []) {
+    for (const item of args) {
+      if (!item || typeof item !== 'object') continue;
+      const hasUser = item.user || item.author;
+      const hasGuild = item.guild || item.guildId;
+      const hasChannel = item.channel || item.channelId;
+      if (hasUser || hasGuild || hasChannel) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+  async dispatchEventResponse(eventConfig, args, extras) {
+    const response = eventConfig.response || eventConfig.config?.response;
+    if (!response) return;
+
+    const source = this.inferEventSource(args);
+    const commandLikeConfig = {
+      name: `event:${eventConfig.event}`,
+      response
+    };
+    const payload = this.createResponsePayload(commandLikeConfig, source, extras);
+    delete payload.ephemeral;
+
+    const targetChannelId = eventConfig.config?.channelId;
+    if (targetChannelId && this.client?.channels?.fetch) {
+      try {
+        const channel = await this.client.channels.fetch(targetChannelId);
+        if (channel && typeof channel.send === 'function') {
+          await channel.send(payload);
+          return;
+        }
+      } catch (error) {
+        this.logger.error(
+          `Failed to send event response for ${eventConfig.event} to channel ${targetChannelId}: ${error.message}`
+        );
+      }
+    }
+
+    if (source?.channel && typeof source.channel.send === 'function') {
+      await source.channel.send(payload);
+    }
+  }
+
+  async handleConfiguredEvent(entry, args) {
+    const eventConfig = entry.config;
+    const source = this.inferEventSource(args);
+    const extras = {
+      event: {
+        name: eventConfig.event,
+        source: entry.source
+      }
+    };
+
+    const consoleMessage = eventConfig.config?.console?.message;
+    if (consoleMessage) {
+      const context = this.getTemplateContext(source, extras);
+      this.logger.info(this.templateValue(consoleMessage, context));
+    }
+
+    if (eventConfig.package) {
+      const pkg = this.packageManager.getPackage(eventConfig.package);
+      if (!pkg) {
+        this.logger.error(`Event ${eventConfig.event} requires unloaded package ${eventConfig.package}`);
+        return;
+      }
+      if (typeof pkg.executeEvent !== 'function') {
+        this.logger.warn(`Package ${eventConfig.package} does not implement executeEvent`);
+        return;
+      }
+      await pkg.executeEvent(eventConfig, args, {
+        client: this.client,
+        config: this.config
+      });
+      return;
+    }
+
+    await this.dispatchEventResponse(eventConfig, args, extras);
+  }
+
+  clearConfiguredEventListeners() {
+    if (!this.client) return;
+    for (const listener of this.boundEventListeners) {
+      this.client.removeListener(listener.event, listener.handler);
+    }
+    this.boundEventListeners = [];
+  }
+
+  bindConfiguredEvents() {
+    if (!this.client) return;
+
+    this.clearConfiguredEventListeners();
+    const enabledEvents = this.eventHandler.getEnabledEvents();
+
+    for (const entry of enabledEvents) {
+      const eventConfig = entry.config;
+      const handler = async (...args) => {
+        try {
+          await this.handleConfiguredEvent(entry, args);
+        } catch (error) {
+          this.logger.error(`Event handler failed (${eventConfig.event}): ${error.message}`);
+        }
+      };
+
+      if (eventConfig.once) {
+        this.client.once(eventConfig.event, handler);
+      } else {
+        this.client.on(eventConfig.event, handler);
+      }
+
+      this.boundEventListeners.push({
+        event: eventConfig.event,
+        handler
+      });
+    }
+
+    this.logger.info(`Bound ${enabledEvents.length} configured event handlers`);
+  }
+
   bindRuntimeHandlers() {
     if (this.handlersBound) {
       return;
@@ -476,6 +597,7 @@ class ArcaneBot {
           await this.loadProjectState();
           if (this.loggedIn && this.client?.isReady()) {
             await this.registerCommands();
+            this.bindConfiguredEvents();
           }
         }
       }

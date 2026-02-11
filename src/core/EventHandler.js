@@ -11,17 +11,33 @@ class EventHandler {
   async loadEvents(dir) {
     this.events.clear();
     const files = await this.scanner.scanDirectory(dir, ['.json']);
+    const errors = [];
 
     for (const file of files) {
-      const eventConfig = await fs.readJson(file);
-      const result = this.validator.validateEvent(eventConfig);
-      if (!result.valid) {
-        throw new Error(`${file}: ${result.errors.join('; ')}`);
+      try {
+        const eventConfig = await fs.readJson(file);
+        const result = this.validator.validateEvent(eventConfig);
+        if (!result.valid) {
+          errors.push(`${file}: ${result.errors.join('; ')}`);
+          continue;
+        }
+
+        const key = `${eventConfig.event}:${file}`;
+        this.events.set(key, { config: eventConfig, source: file });
+      } catch (error) {
+        errors.push(`${file}: ${error.message}`);
       }
-      this.events.set(eventConfig.event, { config: eventConfig, source: file });
+    }
+
+    if (errors.length) {
+      throw new Error(`Event loading failed:\n${errors.join('\n')}`);
     }
 
     return this.events;
+  }
+
+  getEnabledEvents() {
+    return [...this.events.values()].filter((entry) => entry?.config?.enabled !== false);
   }
 }
 

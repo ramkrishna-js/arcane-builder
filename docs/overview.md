@@ -1,6 +1,6 @@
 # Documentation Overview
 
-This documentation is organized for teams shipping real bots, not just demos.
+This docs set is written for teams maintaining Discord bots in production.
 
 ## Learning Path
 
@@ -23,6 +23,7 @@ Arcane currently includes:
 - CLI scaffolding and generation
 - Runtime loading and validation
 - Command registration and interaction handling
+- Event binding and execution from JSON config
 - Component interactions (buttons/select menus)
 - Development watch mode and reload hooks
 
@@ -30,6 +31,6 @@ Arcane currently includes:
 
 1. Define command/event contracts in JSON.
 2. Validate with `arcane validate --strict`.
-3. Run `arcane dev` in a test guild.
-4. Move to global registration when stable.
+3. Run `arcane dev` in a test guild and verify hot-reload behavior.
+4. Move to global command registration when stable.
 5. Deploy via `arcane deploy --pm2 --name arcanebuilder`.

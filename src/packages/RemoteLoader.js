@@ -6,6 +6,12 @@ class RemoteLoader {
         handledBy: packageName,
         version,
         note: 'Remote package execution is not implemented in MVP.'
+      }),
+      executeEvent: async () => ({
+        ok: true,
+        handledBy: packageName,
+        version,
+        note: 'Remote package event execution is not implemented in MVP.'
       })
     };
   }

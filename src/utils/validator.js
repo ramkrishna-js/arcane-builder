@@ -24,8 +24,10 @@ const eventSchema = {
   properties: {
     event: { type: 'string' },
     enabled: { type: 'boolean' },
+    once: { type: 'boolean' },
     package: { type: ['string', 'null'] },
-    config: { type: 'object' }
+    config: { type: 'object' },
+    response: { type: 'object' }
   },
   additionalProperties: true
 };
