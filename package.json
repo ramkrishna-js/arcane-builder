@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "description": "File-based Discord bot framework CLI",
   "main": "src/index.js",
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
   "bin": {
     "arcane": "bin/arcane.js"
   },
